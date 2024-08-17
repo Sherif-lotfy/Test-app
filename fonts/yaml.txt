@@ -1,0 +1,16 @@
+  fonts:
+    - family: Edu
+      fonts:
+        - asset: fonts/EduVICWANTBeginner-VariableFont_wght.ttf
+
+    - family: CairoPlay
+      fonts:
+        - asset: fonts/CairoPlay-VariableFont_slnt,wght.ttf
+
+    - family: Mono
+      fonts:
+        - asset: fonts/RedditMono-VariableFont_wght.ttf
+
+    - family: PoetsenOne
+      fonts:
+        - asset: fonts/PoetsenOne-Regular.ttf
