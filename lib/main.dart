@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'question_list.dart';
+
+Questionlist qs = Questionlist();
+
 void main() {
   runApp(
     const MaterialApp(
@@ -7,19 +11,6 @@ void main() {
     ),
   );
 }
-
-class Qs {
-  String photoUrl, theQ;
-  bool qans;
-  Qs(this.photoUrl, this.theQ, this.qans);
-}
-
-List<Qs> qs = [
-  Qs('image-1.jpg', 'say yes', true),
-  Qs('image-2.jpg', 'say yes', true),
-  Qs('image-3.jpg', 'say no', false),
-  Qs('image-4.jpg', 'say yes', true),
-];
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
@@ -88,32 +79,27 @@ class _ThecontentState extends State<Thecontent> {
     );
   }
 
-  List<Row> answers = [];
+  List<Widget> answers = [];
 
   void check(bool ans) {
-    if (currentQ.qans == ans) {
+    if (qs.getAnswer() == ans) {
       answers.add(like());
     } else {
       answers.add(dislike());
     }
     //issues fixed by this ...
     setState(() {
-      if (qs.isNotEmpty) {
-        currentQ = qs.last;
-        qs.removeLast();
-      }
+      qs.nextQuestion();
     });
   }
-
-  Qs currentQ = qs.isNotEmpty ? qs.last : Qs("", "", false);
 
   Widget printQ() {
     return Column(
       children: [
-        Image.asset('imgs/${currentQ.photoUrl}'),
+        Image.asset('imgs/${qs.getImg()}'),
         const SizedBox(height: 10),
         Text(
-          currentQ.theQ,
+          qs.getText(),
           style: const TextStyle(
             fontFamily: 'PoetsenOne',
             fontSize: 30,
@@ -128,60 +114,52 @@ class _ThecontentState extends State<Thecontent> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        //The array of answers...
         Row(children: answers),
         const SizedBox(height: 20),
-        if (qs.isNotEmpty)
-          printQ()
-        else
-          const Center(
-            child: Text(
-              "We are done here ...",
-              style: TextStyle(
-                fontFamily: 'Mono',
-                fontSize: 30,
-              ),
-            ),
-          ),
+        //The Question...
+        printQ(),
+
         const SizedBox(height: 20),
-        if (qs.isNotEmpty)
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                MaterialButton(
-                  onPressed: () {
-                    check(true);
-                  },
-                  color: Colors.cyan,
-                  child: const Text(
-                    "True",
-                    style: TextStyle(
-                      fontFamily: 'Mono',
-                      fontSize: 35,
-                      color: Colors.white,
-                    ),
+        //Buttons...
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              MaterialButton(
+                onPressed: () {
+                  check(true);
+                },
+                color: Colors.cyan,
+                child: const Text(
+                  "True",
+                  style: TextStyle(
+                    fontFamily: 'Mono',
+                    fontSize: 35,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    check(false);
-                  },
-                  color: Colors.red,
-                  child: const Text(
-                    "False",
-                    style: TextStyle(
-                      fontFamily: 'Mono',
-                      fontSize: 35,
-                      color: Colors.white,
-                    ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              MaterialButton(
+                onPressed: () {
+                  check(false);
+                },
+                color: Colors.red,
+                child: const Text(
+                  "False",
+                  style: TextStyle(
+                    fontFamily: 'Mono',
+                    fontSize: 35,
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
       ],
     );
   }
